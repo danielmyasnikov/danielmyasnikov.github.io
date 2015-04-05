@@ -230,29 +230,6 @@ $(function () {
 	
   // --------------RSVP Form Ajax request-----------------------
 
-    $('.contact_form').on('submit', function(event){
-    event.preventDefault();
-
-    // $this = $(this);
-
-    var data = {
-      name: $('#name').val(),
-      numberOfGuest: $('#numberOfGuest').val(),
-      eventAttending: $('#eventAttending').val(),
-      // email: $('#contact_email').val(),
-      // subject: $('#subject').val(),
-      message: $('#message').val()
-    };
-
-    $.ajax({
-      type: "POST",
-      url: "email.php",
-      data: data,
-      success: function(msg){
-	     $('.contact-success').fadeIn().delay(3000).fadeOut();
-      }
-    });
-  });
 
 /* =================================
 ===  IE10 ON WINDOWS 8 FIX      ====
