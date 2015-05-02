@@ -205,9 +205,6 @@
           </div>
           <!-- /.love-bg end -->
         </div>
-        <div id="next-arrow" class="next-arrow">
-          <a href="#story" class="animated infinite rocket"><i class="fa fa-angle-double-down"></i></a>
-        </div>
       </div>
     </section>
   <!-- couple end -->
@@ -568,7 +565,7 @@
                                             <select name="numberOfGuest" id="numberOfGuest" tabindex="1">
                         <option value="">Количество посещающих свадьбу</option>
                         <option value="1">Только Я </option>
-                        <option value="2">Со своей половинкой / Другом / Подругой (1+)  </option>
+                        <option value="2">Со своей половинкой / Другом / Подругой </option>
                         <option value="3">Нас будет трое </option>
                         <option value="4+">Нас 4 и может больше (написать в пожеланиях сколько) </option>
                       </select>
@@ -585,6 +582,18 @@
                   <div class="col-sm-12">
                     <p class="contact-success">Your Message has been Successfully Sent!</p>
                     <p class="contact-error">Error! Something went wrong!</p>
+                    <div class="alert alert-danger" id="missing-guests" role="alert">
+                      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                      <span class="sr-only">Пожалуйста,</span>
+                       Пожалуйста, укажите количество посещающих свадьбу
+                       <br>
+                    </div>
+
+                    <div class="alert alert-danger" id="missing-name" role="alert">
+                      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                      <span class="sr-only">Пожалуйста,</span>
+                       Пожалуйста, укажите Ваше имя.
+                    </div>
                   </div>
                 </div>
               </form>
@@ -663,15 +672,40 @@
 
     <script>
 
+      $("#missing-guests").hide();
+      $("#missing-name").hide();
       
       $('#send').click(function(event){
         event.preventDefault();
         var api_key = 'PQdipKbbdAuIk9LwsikWtw';
-        var name = $("#rsvp_form input:first-child").val();
-        var persons = $("#rsvp_form select:first-child").val();
-        var msg = $("#rsvp_form textarea").val();
+        var name    = $("#rsvp_form input:first-child").val();
+        var guests  = $("#rsvp_form select:first-child").val();
+        var msg     = $("#rsvp_form textarea").val();
 
-        var html_text = name + ' посещает свадьбу с ' + persons + ' количеством гостей.' + ' Личное сообщение: ' + msg
+        if (name == "" && guests == "") {
+          $("#missing-name").show(); 
+          $("#missing-guests").show();
+          return;
+        } else {
+          if (name == "") {
+            $("#missing-name").show(); 
+            $("#missing-guests").hide(); 
+            return
+          } else {
+            if (guests == "") {
+              $("#missing-guests").show(); 
+              $("#missing-name").hide(); 
+              return
+            } else {
+              $("#missing-guests").hide();
+            }
+            $("#missing-name").hide(); 
+          }
+          $("#missing-guests").hide();
+          $("#missing-name").hide();
+        }
+
+        var html_text = name + ' посещает свадьбу с ' + guests + ' количеством гостей.' + ' Личное сообщение: ' + msg
         $.ajax({
           type: "POST",
           url: "https://mandrillapp.com/api/1.0/messages/send.json",
